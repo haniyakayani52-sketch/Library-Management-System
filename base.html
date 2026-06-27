@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Ghaznavi Library System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .academic-title { font-family: 'Cinzel', serif; }
+    </style>
+</head>
+<body class="bg-stone-100/60 min-h-screen flex flex-col justify-between">
+
+    <nav class="bg-emerald-950 text-stone-100 shadow-md px-8 py-5 flex justify-between items-center border-b-2 border-amber-600/40">
+        <a href="/" class="text-2xl font-bold tracking-wide text-amber-500 academic-title flex items-center gap-3">
+            <span class="text-3xl">🏛</span> Al-Ghaznavi <span class="text-stone-300 font-light text-xl tracking-normal">Library</span>
+        </a>
+        <div class="space-x-6 text-xs font-semibold uppercase tracking-wider">
+            <a href="/" class="hover:text-amber-400 transition">Portal Home</a>
+            {% if session.get('user_id') %}
+                {% if session.get('role') == 'student' %}
+                    <a href="/dashboard" class="hover:text-amber-400 transition">Student Desk</a>
+                {% elif session.get('role') == 'admin' %}
+                    <a href="/admin" class="bg-amber-600 px-3 py-2 rounded text-stone-950 font-bold hover:bg-amber-500 transition">Librarian Console</a>
+                {% endif %}
+                <a href="/logout" class="bg-stone-800 px-3 py-2 rounded border border-stone-700 hover:bg-stone-700 transition text-stone-200">Exit System</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto w-full mt-4 px-6">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="p-4 rounded-xl shadow-sm mb-2 font-medium text-sm {% if category=='danger' %}bg-red-50 text-red-700 border border-red-200{% elif category=='success' %}bg-emerald-50 text-emerald-800 border border-emerald-200{% else %}bg-amber-50 text-amber-900 border border-amber-200{% endif %}">
+                        {{ msg }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <main class="mb-auto p-6 w-full max-w-7xl mx-auto flex-grow block">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-emerald-950 text-stone-400 text-center py-6 text-xs border-t border-stone-800">
+        &copy; 2026 Al-Ghaznavi Digital Library Framework Operations. Institutional Information Architecture.
+    </footer>
+</body>
+</html>

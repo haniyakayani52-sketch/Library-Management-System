@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="space-y-8 mt-2">
+    
+    <div class="bg-stone-900 text-stone-100 p-8 rounded-2xl shadow-md border-b-4 border-amber-500">
+        <span class="text-[10px] font-bold tracking-widest uppercase text-amber-500">Curator Authorization Grid</span>
+        <h2 class="text-2xl font-bold tracking-wide mt-1 academic-title">Librarian Inventory Desk</h2>
+        <p class="text-xs text-stone-400 mt-1">Audit complete tracking arrays, register new textbook infrastructure, and enforce volume management rules.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <div class="lg:col-span-4 bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-emerald-950 uppercase tracking-wider border-b border-stone-100 pb-2 academic-title">Catalog Asset Entry</h3>
+            <form action="/admin/add-book" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-stone-600 mb-1">Book Volume Title</label>
+                    <input type="text" name="title" required placeholder="e.g. Introduction to Algorithms" 
+                           class="w-full border border-stone-300 p-2.5 rounded-lg text-xs outline-none focus:ring-2 focus:ring-emerald-800 bg-stone-50/50 focus:bg-white text-stone-800">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-stone-600 mb-1">Author / Publisher Credentials</label>
+                    <input type="text" name="author" required placeholder="e.g. Thomas H. Cormen" 
+                           class="w-full border border-stone-300 p-2.5 rounded-lg text-xs outline-none focus:ring-2 focus:ring-emerald-800 bg-stone-50/50 focus:bg-white text-stone-800">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase text-stone-600 mb-1">ISBN Code</label>
+                        <input type="text" name="isbn" required placeholder="978-..." 
+                               class="w-full border border-stone-300 p-2.5 rounded-lg text-xs outline-none focus:ring-2 focus:ring-emerald-800 bg-stone-50/50 focus:bg-white text-stone-800">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase text-stone-600 mb-1">Discipline Gen.</label>
+                        <input type="text" name="genre" required placeholder="Computer Science" 
+                               class="w-full border border-stone-300 p-2.5 rounded-lg text-xs outline-none focus:ring-2 focus:ring-emerald-800 bg-stone-50/50 focus:bg-white text-stone-800">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-stone-600 mb-1">Stock Copies Quantity</label>
+                    <input type="number" name="total_copies" required min="1" value="1" 
+                           class="w-full border border-stone-300 p-2.5 rounded-lg text-xs outline-none focus:ring-2 focus:ring-emerald-800 bg-stone-50/50 focus:bg-white text-stone-800">
+                </div>
+                <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-amber-400 font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition shadow-sm pt-3">
+                    Commit to Ledger
+                </button>
+            </form>
+        </div>
+
+        <div class="lg:col-span-8 bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-emerald-950 uppercase tracking-wider border-b border-stone-100 pb-2 academic-title">Global Transaction Log Audit Matrix</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-emerald-950 text-stone-100 uppercase tracking-wider text-[9px] border-b-2 border-amber-600">
+                            <th class="p-3 rounded-l-lg">Student Profile</th>
+                            <th class="p-3">Assigned Asset</th>
+                            <th class="p-3">Checkout Date</th>
+                            <th class="p-3">Due Deadline</th>
+                            <th class="p-3 rounded-r-lg">State</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-stone-100 font-medium text-stone-700">
+                        {% if global_transactions %}
+                            {% for log in global_transactions %}
+                            <tr class="hover:bg-stone-50/80 transition">
+                                <td class="p-3 text-stone-900 font-bold">
+                                    {{ log.user_name }}<br><span class="text-[10px] text-stone-400 font-mono font-normal">{{ log.email }}</span>
+                                </td>
+                                <td class="p-3 font-semibold text-emerald-950">{{ log.title }}</td>
+                                <td class="p-3 text-stone-500 font-mono">{{ log.borrow_date }}</td>
+                                <td class="p-3 text-red-600 font-mono font-bold">{{ log.due_date }}</td>
+                                <td class="p-3">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide {% if log.status == 'borrowed' %}bg-amber-100 text-amber-900 border border-amber-200{% else %}bg-emerald-100 text-emerald-900 border border-emerald-200{% endif %}">
+                                        {{ log.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="p-12 text-center text-stone-400 border border-dashed border-stone-200 rounded-xl">
+                                    No transaction operations currently indexed in system memory ledger.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
